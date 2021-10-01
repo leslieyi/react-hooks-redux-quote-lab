@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { v4 as uuid } from "uuid";
 import { addQuote } from "./quotesSlice";
 
@@ -6,17 +7,40 @@ function QuoteForm() {
   const [formData, setFormData] = useState({
     // set up a controlled form with internal state
     // look at the form to determine what keys need to go here
+    author: "",
+    content: "",
   });
 
-  function handleChange(event) {
+  //You will make a dispatch action to Redux using an action you will create called addQuote() that will take a quote as an argument and start the reducer process.
+  const dispatch = useDispatch();
+
+  function handleChange(e) {
     // Handle Updating Component State
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   }
 
-  function handleSubmit(event) {
+  function handleSubmit(e) {
     // Handle Form Submit event default
+
     // Create quote object from state
     // Pass quote object to action creator
     // Update component state to return to default state
+
+    e.preventDefault();
+    dispatch(
+      addQuote({
+        ...formData,
+        id: uuid(),
+        votes: 0,
+      })
+    );
+    setFormData({
+      author: "",
+      content: "",
+    });
   }
 
   return (
